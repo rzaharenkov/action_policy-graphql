@@ -222,7 +222,7 @@ describe "field extensions", :aggregate_failures do
     context "with mutation" do
       let(:query) do
         %(mutation {
-          createPost(title: "GQL") {
+          createRandomPost {
             post {
               title
             }
@@ -235,9 +235,25 @@ describe "field extensions", :aggregate_failures do
           .with(PostPolicy)
       end
 
-      # See spec_helper.rb for default settings
-      it "raises if authorize_raise_exception is set to false but authorize_mutation_raise_exception is set to true" do
-        expect { subject }.to raise_error(ActionPolicy::Unauthorized)
+      context 'when authorize_raise_exception is set to false but authorize_mutation_raise_exception is set to true' do
+        before do
+          allow(ActionPolicy::GraphQL).to receive(:authorize_raise_exception).and_return(false)
+        end
+
+        it "raises error" do
+          expect { subject }.to raise_error(ActionPolicy::Unauthorized)
+        end
+      end
+
+      context 'when both authorize_raise_exception authorize_mutation_raise_exception are set to false' do
+        before do
+          allow(ActionPolicy::GraphQL).to receive(:authorize_raise_exception).and_return(false)
+          allow(ActionPolicy::GraphQL).to receive(:authorize_mutation_raise_exception).and_return(false)
+        end
+
+        it "does not raise error" do
+          expect { subject }.not_to raise_error
+        end
       end
     end
   end

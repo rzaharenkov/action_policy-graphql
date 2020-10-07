@@ -227,6 +227,14 @@ class CreatePostMutation < BaseMutation
   end
 end
 
+class CreateRandomPostMutation < BaseMutation
+  field :post, PostType, null: false
+
+  def resolve
+    {post: Post.new(title: SecureRandom.hex)}
+  end
+end
+
 class Schema < GraphQL::Schema
   class << self
     attr_accessor :posts, :post
@@ -294,5 +302,6 @@ class Schema < GraphQL::Schema
     end
 
     field :create_post, mutation: CreatePostMutation, null: false, preauthorize: {with: PostPolicy, to: :publish?}
+    field :create_random_post, mutation: CreateRandomPostMutation, null: false, authorize: {with: PostPolicy, to: :publish?}
   end)
 end
