@@ -35,7 +35,7 @@ module ActionPolicy
 
       # Whether to raise an exception if preauthorization fails
       # Equals to authorize_raise_exception unless explicitly set
-      def preauthorize_raise_exception
+      def self.preauthorize_raise_exception
         return authorize_raise_exception if @preauthorize_raise_exception.nil?
         @preauthorize_raise_exception
       end
@@ -44,7 +44,7 @@ module ActionPolicy
       # Equals to preauthorize_raise_exception unless explicitly set
       attr_writer :preauthorize_mutation_raise_exception
 
-      def preauthorize_mutation_raise_exception
+      def self.preauthorize_mutation_raise_exception
         return preauthorize_raise_exception if @preauthorize_mutation_raise_exception.nil?
 
         @preauthorize_mutation_raise_exception
